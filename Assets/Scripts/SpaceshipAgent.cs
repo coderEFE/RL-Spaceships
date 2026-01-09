@@ -4,22 +4,27 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
+public enum Team
+{
+    Blue = 0,
+    Orange = 1
+}
+
 public class SpaceshipAgent : Agent
 {
-    [SerializeField] private GameObject asteroidPrefab;
+    //[SerializeField] private SpaceshipEnvController envController;
     [SerializeField] private GameObject laser;
     [SerializeField] private float moveSpeed = 1.5f;
     [SerializeField] private float turnSpeed = 180f;
     [SerializeField] private float laserLength = 15f;
     [SerializeField] private float shootCooldown = 1f;
 
+    public Team team;
     private Rigidbody2D agentRb;
     private bool isShooting = false; // TODO: might not need this?
     private float lastShootTime = 0f;
     private int currentEpisode = 0;
     private float cumulativeReward = 0f;
-    private List<GameObject> asteroids = new List<GameObject>();
-    private int numAsteroids = 3;
 
     public override void Initialize()
     {
@@ -29,8 +34,6 @@ public class SpaceshipAgent : Agent
         currentEpisode = 0;
         cumulativeReward = 0f;
         isShooting = false;
-
-        SpawnObjects();
     }
 
     public override void OnEpisodeBegin()
@@ -41,29 +44,6 @@ public class SpaceshipAgent : Agent
         cumulativeReward = 0f;
         isShooting = false;
         laser.transform.localScale = new Vector3(0f, 0f, 0f);
-
-        // Destroy existing asteroids
-        foreach (var asteroid in asteroids)
-        {
-            Destroy(asteroid);
-        }
-        asteroids.Clear();
-        SpawnObjects();
-    }
-
-    private void SpawnObjects()
-    {
-        transform.localPosition = new Vector3(Random.Range(-19f, 19f), Random.Range(-19f, 19f), 0f);
-        transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
-        agentRb.linearVelocity = Vector2.zero;
-
-        // TODO: Might move this later to a different script that manages the environment
-        for (int i = 0; i < numAsteroids; i++)
-        {
-            Vector3 asteroidPosition = transform.parent.position + new Vector3(Random.Range(-18f, 18f), Random.Range(-18f, 18f), 0f);
-            GameObject asteroid = Instantiate(asteroidPrefab, asteroidPosition, Quaternion.identity, transform.parent);
-            asteroids.Add(asteroid);
-        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -129,9 +109,8 @@ public class SpaceshipAgent : Agent
     {
         MoveAgent(actions);
 
-        AddReward(-2f / MaxStep);
-
-        cumulativeReward = GetCumulativeReward();
+        //AddReward(-2f / MaxStep);
+        //cumulativeReward = GetCumulativeReward();
     }
 
     public void MoveAgent(ActionBuffers actions)
@@ -168,26 +147,13 @@ public class SpaceshipAgent : Agent
                 // Shoot asteroid
                 if (hit.collider.CompareTag("asteroid"))
                 {
-                    AddReward(1.0f);
-                    cumulativeReward = GetCumulativeReward();
-                    Destroy(hit.collider.gameObject);
-                    asteroids.Remove(hit.collider.gameObject);
-                    CheckIfAsteroidsGone();
+                    hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
                 }
             }
         } else
         {
             isShooting = false;
             laser.transform.localScale = new Vector3(0f, 0f, 0f);
-        }
-    }
-
-    private void CheckIfAsteroidsGone()
-    {
-        if (asteroids.Count == 0)
-        {
-            cumulativeReward = GetCumulativeReward();
-            EndEpisode();
         }
     }
 
@@ -204,6 +170,14 @@ public class SpaceshipAgent : Agent
         if (collision.collider.CompareTag("wall"))
         {
             AddReward(-0.01f * Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.CompareTag("resource"))
+        {
+            collider.gameObject.GetComponent<Resource>().OnCollected(team);
         }
     }
 }

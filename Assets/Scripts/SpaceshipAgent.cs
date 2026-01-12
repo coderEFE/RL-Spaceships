@@ -149,11 +149,28 @@ public class SpaceshipAgent : Agent
                 {
                     hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
                 }
+                else if (hit.collider.CompareTag("blueAgent") || hit.collider.CompareTag("orangeAgent"))
+                {
+                    // TODO: if enabling friendly fire later, make sure raycasts can't trigger on own gameobject
+                    hit.collider.gameObject.GetComponent<SpaceshipAgent>().OnHit(team);
+                }
             }
         } else
         {
             isShooting = false;
             laser.transform.localScale = new Vector3(0f, 0f, 0f);
+        }
+    }
+
+    public static event System.Action<SpaceshipAgent> OnSpaceshipDestroyed;
+
+    public void OnHit(Team assaultingTeam)
+    {
+        if (assaultingTeam != team)
+        {
+            // TODO: could have hit points instead of insta-death
+            // TODO: could add -1.0 negative reward for being destroyed
+            OnSpaceshipDestroyed?.Invoke(this);
         }
     }
 

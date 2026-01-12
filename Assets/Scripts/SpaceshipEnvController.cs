@@ -6,7 +6,7 @@ public class SpaceshipEnvController : MonoBehaviour
 {
     [SerializeField] private GameObject asteroidPrefab;
     private List<GameObject> asteroids = new List<GameObject>();
-    private int numAsteroids = 3;
+    private int numAsteroids = 5;
     
     [SerializeField] private GameObject resourcePrefab;
     private List<GameObject> resources = new List<GameObject>();
@@ -14,6 +14,8 @@ public class SpaceshipEnvController : MonoBehaviour
     public List<SpaceshipAgent> agentsList = new List<SpaceshipAgent>();
     private SimpleMultiAgentGroup blueAgentGroup;
     private SimpleMultiAgentGroup orangeAgentGroup;
+    int numberBlueAgentsRemaining;
+    int numberOrangeAgentsRemaining;
     
     /// <summary>
     /// Max Academy steps before this platform resets
@@ -25,16 +27,6 @@ public class SpaceshipEnvController : MonoBehaviour
     {
         blueAgentGroup = new SimpleMultiAgentGroup();
         orangeAgentGroup = new SimpleMultiAgentGroup();
-        foreach (var agent in agentsList)
-        {
-            if (agent.team == Team.Blue) {
-                blueAgentGroup.RegisterAgent(agent);
-            }
-            else
-            {
-                orangeAgentGroup.RegisterAgent(agent);
-            }
-        }
         ResetScene();
     }
 
@@ -48,7 +40,18 @@ public class SpaceshipEnvController : MonoBehaviour
             agent.transform.localPosition = new Vector3(Random.Range(-19f, 19f), Random.Range(-19f, 19f), 0f);
             agent.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
             agent.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            agent.gameObject.SetActive(true);
+
+            if (agent.team == Team.Blue) {
+                blueAgentGroup.RegisterAgent(agent);
+            }
+            else
+            {
+                orangeAgentGroup.RegisterAgent(agent);
+            }
         }
+        numberBlueAgentsRemaining = blueAgentGroup.GetRegisteredAgents().Count;
+        numberOrangeAgentsRemaining = orangeAgentGroup.GetRegisteredAgents().Count;
 
         // Destroy existing asteroids
         foreach (var asteroid in asteroids)
@@ -77,12 +80,14 @@ public class SpaceshipEnvController : MonoBehaviour
     {
         Asteroid.OnAsteroidDestroyed += HandleAsteroidDestroyed;
         Resource.OnResourceCollected += HandleResourceCollected;
+        SpaceshipAgent.OnSpaceshipDestroyed += HandleSpaceshipDestroyed;
     }
 
     void OnDisable()
     {
         Asteroid.OnAsteroidDestroyed -= HandleAsteroidDestroyed;
         Resource.OnResourceCollected -= HandleResourceCollected;
+        SpaceshipAgent.OnSpaceshipDestroyed -= HandleSpaceshipDestroyed;
     }
 
     private void HandleAsteroidDestroyed(Asteroid asteroid)
@@ -113,6 +118,29 @@ public class SpaceshipEnvController : MonoBehaviour
             blueAgentGroup.EndGroupEpisode();
             orangeAgentGroup.EndGroupEpisode();
             ResetScene();
+        }
+    }
+
+    private void HandleSpaceshipDestroyed(SpaceshipAgent agent)
+    {
+        agent.gameObject.SetActive(false);
+        if (agent.team == Team.Blue)
+        {
+            numberBlueAgentsRemaining--;
+            if (numberBlueAgentsRemaining == 0)
+            {
+                Debug.Log("All blue agents destroyed");
+                blueAgentGroup.AddGroupReward(-3.0f);
+            }
+        }
+        else
+        {
+            numberOrangeAgentsRemaining--;
+            if (numberOrangeAgentsRemaining == 0)
+            {
+                Debug.Log("All orange agents destroyed");
+                orangeAgentGroup.AddGroupReward(-3.0f);
+            }
         }
     }
 

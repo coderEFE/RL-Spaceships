@@ -695,7 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: ce30448d471472b4da399ff4569a72c4, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: d281c92f7b08dca4193a269468749396, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: Spaceship
@@ -735,6 +735,7 @@ MonoBehaviour:
   laserLength: 15
   shootCooldown: 1
   team: 1
+  isTeammateAlive: 1
 --- !u!114 &881471986707899998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +758,7 @@ MonoBehaviour:
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
-  m_RayLength: 25
+  m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 51
@@ -1695,7 +1696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1704,7 +1705,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: ce30448d471472b4da399ff4569a72c4, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: d281c92f7b08dca4193a269468749396, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: Spaceship
@@ -1735,6 +1736,7 @@ MonoBehaviour:
   laserLength: 15
   shootCooldown: 1
   team: 0
+  isTeammateAlive: 1
 --- !u!114 &6146037791811022942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1757,7 +1759,7 @@ MonoBehaviour:
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
-  m_RayLength: 25
+  m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 51
@@ -1967,7 +1969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1976,7 +1978,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: ce30448d471472b4da399ff4569a72c4, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: d281c92f7b08dca4193a269468749396, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: Spaceship
@@ -2007,6 +2009,7 @@ MonoBehaviour:
   laserLength: 15
   shootCooldown: 1
   team: 0
+  isTeammateAlive: 1
 --- !u!114 &4461611907034197338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2029,7 +2032,7 @@ MonoBehaviour:
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
-  m_RayLength: 25
+  m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 51
@@ -2419,7 +2422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -2428,7 +2431,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: ce30448d471472b4da399ff4569a72c4, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: d281c92f7b08dca4193a269468749396, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: Spaceship
@@ -2459,6 +2462,7 @@ MonoBehaviour:
   laserLength: 15
   shootCooldown: 1
   team: 1
+  isTeammateAlive: 1
 --- !u!114 &7802350440577432856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,7 +2485,7 @@ MonoBehaviour:
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
-  m_RayLength: 25
+  m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 51

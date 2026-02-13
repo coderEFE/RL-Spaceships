@@ -23,6 +23,7 @@ public class SpaceshipAgent : Agent
     private Rigidbody2D agentRb;
     private bool isShooting = false; // TODO: might not need this?
     private float lastShootTime = 0f;
+    public bool isTeammateAlive = true; // This approach would change if we have more than 2 agents per team
     private int currentEpisode = 0;
     private float cumulativeReward = 0f;
 
@@ -67,6 +68,8 @@ public class SpaceshipAgent : Agent
         // time remaining to shoot = 1 if just shot, 0 if can shoot now
         var timeRemainingToShoot = Mathf.Clamp01((lastShootTime + shootCooldown - Time.time) / shootCooldown);
         sensor.AddObservation(timeRemainingToShoot);
+        sensor.AddObservation(isTeammateAlive ? 1f : 0f);
+        //Debug.Log(gameObject.name + ", isTeammateAlive: " + isTeammateAlive);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -155,6 +158,8 @@ public class SpaceshipAgent : Agent
                     hit.collider.gameObject.GetComponent<SpaceshipAgent>().OnHit(team);
                 }
             }
+            // Small penalty for shooting to discourage spamming
+            AddReward(-0.1f);
         } else
         {
             isShooting = false;

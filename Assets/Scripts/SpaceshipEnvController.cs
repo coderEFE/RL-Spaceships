@@ -27,26 +27,43 @@ public class SpaceshipEnvController : MonoBehaviour
     {
         blueAgentGroup = new SimpleMultiAgentGroup();
         orangeAgentGroup = new SimpleMultiAgentGroup();
-        ResetScene();
+        ResetScene(true);
     }
 
-    private void ResetScene()
+    private void ResetScene(bool firstTime)
     {
         resetTimer = 0;
+
+        if (!firstTime) {
+            // Record custom stats
+            Academy.Instance.StatsRecorder.Add("Custom/NumAsteroidsLeft", asteroids.Count);
+            Academy.Instance.StatsRecorder.Add("Custom/NumBlueAlive", numberBlueAgentsRemaining);
+            Academy.Instance.StatsRecorder.Add("Custom/NumOrangeAlive", numberOrangeAgentsRemaining);
+            Academy.Instance.StatsRecorder.Add("Custom/NumTotalAlive", (numberBlueAgentsRemaining + numberOrangeAgentsRemaining));
+        }
+
+        // Clustered randomization of teams
+        Vector2 blueTeamCenter = new Vector2(Random.Range(-16f, 16f), Random.Range(-16f, 16f));
+        Vector2 orangeTeamCenter;
+        do {
+            orangeTeamCenter = new Vector2(Random.Range(-16f, 16f), Random.Range(-16f, 16f));
+        } while (Vector2.Distance(blueTeamCenter, orangeTeamCenter) < 10f);
 
         // Reset agents
         foreach (var agent in agentsList)
         {
-            agent.transform.localPosition = new Vector3(Random.Range(-19f, 19f), Random.Range(-19f, 19f), 0f);
+            //agent.transform.localPosition = new Vector3(Random.Range(-19f, 19f), Random.Range(-19f, 19f), 0f);
             agent.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
             agent.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             agent.gameObject.SetActive(true);
 
             if (agent.team == Team.Blue) {
+                agent.transform.localPosition = (Vector3)(blueTeamCenter + (3f * Random.insideUnitCircle));
                 blueAgentGroup.RegisterAgent(agent);
             }
             else
             {
+                agent.transform.localPosition = (Vector3)(orangeTeamCenter + (3f * Random.insideUnitCircle));
                 orangeAgentGroup.RegisterAgent(agent);
             }
         }
@@ -117,7 +134,7 @@ public class SpaceshipEnvController : MonoBehaviour
             Debug.Log("All objects gone, ending episode");
             blueAgentGroup.EndGroupEpisode();
             orangeAgentGroup.EndGroupEpisode();
-            ResetScene();
+            ResetScene(false);
         }
     }
 
@@ -127,21 +144,40 @@ public class SpaceshipEnvController : MonoBehaviour
         if (agent.team == Team.Blue)
         {
             numberBlueAgentsRemaining--;
-            if (numberBlueAgentsRemaining == 0)
+            foreach (var otherAgent in agentsList)
+            {
+                if (otherAgent.team == Team.Blue && otherAgent != agent)
+                {
+                    otherAgent.isTeammateAlive = false;
+                }
+            }
+            /*if (numberBlueAgentsRemaining == 0)
             {
                 Debug.Log("All blue agents destroyed");
                 blueAgentGroup.AddGroupReward(-3.0f);
-            }
+            }*/
+            //blueAgentGroup.AddGroupReward(-2.0f);
         }
         else
         {
             numberOrangeAgentsRemaining--;
-            if (numberOrangeAgentsRemaining == 0)
+            foreach (var otherAgent in agentsList)
+            {
+                if (otherAgent.team == Team.Orange && otherAgent != agent)
+                {
+                    otherAgent.isTeammateAlive = false;
+                }
+            }
+            /*if (numberOrangeAgentsRemaining == 0)
             {
                 Debug.Log("All orange agents destroyed");
                 orangeAgentGroup.AddGroupReward(-3.0f);
-            }
+            }*/
+            //orangeAgentGroup.AddGroupReward(-2.0f);
         }
+        // Drop a single resource where ship is destroyed
+        GameObject resource = Instantiate(resourcePrefab, agent.transform.position, Quaternion.identity, transform);
+        resources.Add(resource);
     }
 
     bool AreObjectsGone()
@@ -159,7 +195,7 @@ public class SpaceshipEnvController : MonoBehaviour
         {
             blueAgentGroup.GroupEpisodeInterrupted();
             orangeAgentGroup.GroupEpisodeInterrupted();
-            ResetScene();
+            ResetScene(false);
         }
     }
 }

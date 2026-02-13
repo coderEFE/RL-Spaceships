@@ -836,6 +836,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 126015212395497444, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 8600ea0a901558248be8c736d3d9fd48, type: 3}
+    - target: {fileID: 126015212395497444, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 857050844732292503, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -879,6 +887,30 @@ PrefabInstance:
     - target: {fileID: 1839390189488287252, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
       propertyPath: m_Name
       value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536137357809156187, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 8600ea0a901558248be8c736d3d9fd48, type: 3}
+    - target: {fileID: 3536137357809156187, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5262238893002295417, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 8600ea0a901558248be8c736d3d9fd48, type: 3}
+    - target: {fileID: 5262238893002295417, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818697688820673169, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 8600ea0a901558248be8c736d3d9fd48, type: 3}
+    - target: {fileID: 7818697688820673169, guid: e929c9daae7e78f43930ca3327c7e753, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

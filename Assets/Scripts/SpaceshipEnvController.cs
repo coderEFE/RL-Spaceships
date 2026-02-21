@@ -16,6 +16,8 @@ public class SpaceshipEnvController : MonoBehaviour
     private SimpleMultiAgentGroup orangeAgentGroup;
     int numberBlueAgentsRemaining;
     int numberOrangeAgentsRemaining;
+    float sumOfAgentDeathTimes = 0f;
+    //float mockBlueGroupReward = 0f;
     
     /// <summary>
     /// Max Academy steps before this platform resets
@@ -33,6 +35,7 @@ public class SpaceshipEnvController : MonoBehaviour
     private void ResetScene(bool firstTime)
     {
         resetTimer = 0;
+        //mockBlueGroupReward = 0f;
 
         if (!firstTime) {
             // Record custom stats
@@ -40,6 +43,7 @@ public class SpaceshipEnvController : MonoBehaviour
             Academy.Instance.StatsRecorder.Add("Custom/NumBlueAlive", numberBlueAgentsRemaining);
             Academy.Instance.StatsRecorder.Add("Custom/NumOrangeAlive", numberOrangeAgentsRemaining);
             Academy.Instance.StatsRecorder.Add("Custom/NumTotalAlive", (numberBlueAgentsRemaining + numberOrangeAgentsRemaining));
+            Academy.Instance.StatsRecorder.Add("Custom/AverageAgentDeathTime", sumOfAgentDeathTimes / (numberBlueAgentsRemaining + numberOrangeAgentsRemaining));
         }
 
         // Clustered randomization of teams
@@ -69,6 +73,7 @@ public class SpaceshipEnvController : MonoBehaviour
         }
         numberBlueAgentsRemaining = blueAgentGroup.GetRegisteredAgents().Count;
         numberOrangeAgentsRemaining = orangeAgentGroup.GetRegisteredAgents().Count;
+        sumOfAgentDeathTimes = 0f;
 
         // Destroy existing asteroids
         foreach (var asteroid in asteroids)
@@ -121,6 +126,7 @@ public class SpaceshipEnvController : MonoBehaviour
         {
             Debug.Log("Blue team collected a resource!");
             blueAgentGroup.AddGroupReward(1.0f);
+            //mockBlueGroupReward += 1.0f;
         }
         else
         {
@@ -157,6 +163,8 @@ public class SpaceshipEnvController : MonoBehaviour
                 blueAgentGroup.AddGroupReward(-3.0f);
             }*/
             //blueAgentGroup.AddGroupReward(-2.0f);
+            blueAgentGroup.AddGroupReward(-8.0f);
+            //mockBlueGroupReward -= 2.0f;
         }
         else
         {
@@ -174,7 +182,9 @@ public class SpaceshipEnvController : MonoBehaviour
                 orangeAgentGroup.AddGroupReward(-3.0f);
             }*/
             //orangeAgentGroup.AddGroupReward(-2.0f);
+            orangeAgentGroup.AddGroupReward(-8.0f);
         }
+        sumOfAgentDeathTimes += resetTimer;
         // Drop a single resource where ship is destroyed
         GameObject resource = Instantiate(resourcePrefab, agent.transform.position, Quaternion.identity, transform);
         resources.Add(resource);
@@ -190,6 +200,8 @@ public class SpaceshipEnvController : MonoBehaviour
         resetTimer += 1;
         blueAgentGroup.AddGroupReward(-2f / MaxEnvironmentSteps);
         orangeAgentGroup.AddGroupReward(-2f / MaxEnvironmentSteps);
+        //mockBlueGroupReward -= (2f / MaxEnvironmentSteps);
+        //Debug.Log("Blue group reward: " + mockBlueGroupReward);
         //Debug.Log("Expected penalty: " + ((-2f / MaxEnvironmentSteps) * resetTimer));
         if (resetTimer >= MaxEnvironmentSteps && MaxEnvironmentSteps > 0)
         {

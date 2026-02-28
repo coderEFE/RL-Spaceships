@@ -9,6 +9,10 @@ TagManager:
   - wall
   - asteroid
   - resource
+  - blueAsteroid
+  - orangeAsteroid
+  - blueResource
+  - orangeResource
   layers:
   - Default
   - TransparentFX

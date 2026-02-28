@@ -27,6 +27,8 @@ public class SpaceshipAgent : Agent
     private int currentEpisode = 0;
     private float cumulativeReward = 0f;
 
+    public bool symbioticEnvironment = false;
+
     public override void Initialize()
     {
         Debug.Log("Initialize");
@@ -141,7 +143,6 @@ public class SpaceshipAgent : Agent
         {
             isShooting = true;
             lastShootTime = Time.time;
-            laser.transform.localScale = new Vector3(0.2f, laserLength, 0.2f);
             var rayDir = laserLength * transform.up;
             //Debug.DrawRay(transform.position, rayDir, Color.red, 0.5f, true);
             RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDir, laserLength);
@@ -157,7 +158,22 @@ public class SpaceshipAgent : Agent
                     // TODO: if enabling friendly fire later, make sure raycasts can't trigger on own gameobject
                     hit.collider.gameObject.GetComponent<SpaceshipAgent>().OnHit(team);
                 }
+
+                if (symbioticEnvironment)
+                {
+                    if (team == Team.Blue && hit.collider.CompareTag("blueAsteroid"))
+                    {
+                        hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
+                        AddReward(0.2f);
+                    }
+                    if (team == Team.Orange && hit.collider.CompareTag("orangeAsteroid"))
+                    {
+                        hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
+                        AddReward(0.2f);
+                    }
+                }
             }
+            laser.transform.localScale = new Vector3(0.2f, hit.collider != null ? hit.distance : laserLength, 0.2f);
             // Small penalty for shooting to discourage spamming
             AddReward(-0.1f);
         } else
@@ -175,6 +191,7 @@ public class SpaceshipAgent : Agent
         {
             // TODO: could have hit points instead of insta-death
             // TODO: could add -1.0 negative reward for being destroyed
+            AddReward(-1.0f);
             OnSpaceshipDestroyed?.Invoke(this);
         }
     }
@@ -200,6 +217,18 @@ public class SpaceshipAgent : Agent
         if (collider.CompareTag("resource"))
         {
             collider.gameObject.GetComponent<Resource>().OnCollected(team);
+        }
+
+        if (symbioticEnvironment)
+        {
+            if (team == Team.Blue && collider.CompareTag("blueResource"))
+            {
+                collider.gameObject.GetComponent<Resource>().OnCollected(team);
+            }
+            if (team == Team.Orange && collider.CompareTag("orangeResource"))
+            {
+                collider.gameObject.GetComponent<Resource>().OnCollected(team);
+            }
         }
     }
 }

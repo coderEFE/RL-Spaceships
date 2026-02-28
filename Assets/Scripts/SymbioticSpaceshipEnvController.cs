@@ -2,13 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 
-public class SpaceshipEnvController : MonoBehaviour
+public class SymboiticSpaceshipEnvController : MonoBehaviour
 {
-    [SerializeField] private GameObject asteroidPrefab;
+    [SerializeField] private GameObject blueAsteroidPrefab;
+    [SerializeField] private GameObject orangeAsteroidPrefab;
     private List<GameObject> asteroids = new List<GameObject>();
-    private int numAsteroids = 5;
+    private int numAsteroidsOfEachColor = 3;
     
-    [SerializeField] private GameObject resourcePrefab;
+    [SerializeField] private GameObject blueResourcePrefab;
+    [SerializeField] private GameObject orangeResourcePrefab;
     private List<GameObject> resources = new List<GameObject>();
 
     public List<SpaceshipAgent> agentsList = new List<SpaceshipAgent>();
@@ -90,10 +92,16 @@ public class SpaceshipEnvController : MonoBehaviour
         resources.Clear();
         
         // Spawn new asteroids
-        for (int i = 0; i < numAsteroids; i++)
+        for (int i = 0; i < numAsteroidsOfEachColor; i++)
         {
             Vector3 asteroidPosition = transform.position + new Vector3(Random.Range(-18f, 18f), Random.Range(-18f, 18f), 0f);
-            GameObject asteroid = Instantiate(asteroidPrefab, asteroidPosition, Quaternion.identity, transform);
+            GameObject asteroid = Instantiate(blueAsteroidPrefab, asteroidPosition, Quaternion.identity, transform);
+            asteroids.Add(asteroid);
+        }
+        for (int i = 0; i < numAsteroidsOfEachColor; i++)
+        {
+            Vector3 asteroidPosition = transform.position + new Vector3(Random.Range(-18f, 18f), Random.Range(-18f, 18f), 0f);
+            GameObject asteroid = Instantiate(orangeAsteroidPrefab, asteroidPosition, Quaternion.identity, transform);
             asteroids.Add(asteroid);
         }
     }
@@ -114,10 +122,15 @@ public class SpaceshipEnvController : MonoBehaviour
 
     private void HandleAsteroidDestroyed(Asteroid asteroid)
     {
-        GameObject resource1 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(-0.5f, 0f, 0f), Quaternion.identity, transform);
-        resources.Add(resource1);
-        GameObject resource2 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(0.5f, 0f, 0f), Quaternion.identity, transform);
-        resources.Add(resource2);
+        if (asteroid.team == Team.Blue) {
+            GameObject resource = Instantiate(orangeResourcePrefab, asteroid.transform.position + new Vector3(-0.5f, 0f, 0f), Quaternion.identity, transform);
+            resources.Add(resource);
+        }
+        else
+        {
+            GameObject resource = Instantiate(blueResourcePrefab, asteroid.transform.position + new Vector3(0.5f, 0f, 0f), Quaternion.identity, transform);
+            resources.Add(resource);
+        }
         asteroids.Remove(asteroid.gameObject);
     }
 
@@ -164,9 +177,11 @@ public class SpaceshipEnvController : MonoBehaviour
                 Debug.Log("All blue agents destroyed");
                 blueAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //blueAgentGroup.AddGroupReward(-2.0f);
+            //blueAgentGroup.AddGroupReward(-1.0f);
             //blueAgentGroup.AddGroupReward(-8.0f);
             //mockBlueGroupReward -= 2.0f;
+            //GameObject resource = Instantiate(orangeResourcePrefab, agent.transform.position, Quaternion.identity, transform);
+            //resources.Add(resource);
         }
         else
         {
@@ -183,13 +198,12 @@ public class SpaceshipEnvController : MonoBehaviour
                 Debug.Log("All orange agents destroyed");
                 orangeAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //orangeAgentGroup.AddGroupReward(-2.0f);
+            //orangeAgentGroup.AddGroupReward(-1.0f);
             //orangeAgentGroup.AddGroupReward(-8.0f);
+            //GameObject resource = Instantiate(blueResourcePrefab, agent.transform.position, Quaternion.identity, transform);
+            //resources.Add(resource);
         }
         sumOfAgentDeathTimes += resetTimer;
-        // Drop a single resource where ship is destroyed
-        GameObject resource = Instantiate(resourcePrefab, agent.transform.position, Quaternion.identity, transform);
-        resources.Add(resource);
     }
 
     bool AreObjectsGone()

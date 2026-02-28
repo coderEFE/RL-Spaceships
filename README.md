@@ -97,6 +97,70 @@
 
     OUTCOME: Despite having a much lower GroupCumulativeReward than previous configurations, ships still shoot each other regularly. NumTotalAlive is quite higher than previous configurations, but is still decreasing over time and overall behavior seems the same. Not sure why, but some of the tensorboard graphs stop showing data after a point in training. Ships did not learn to optimize their shooting much (probably because of the magnitude of the penalties they are recieving) and shoot about every second. Ships are very hesitant to move and pause regularly.
 
+- `RewardingAsteroids`:
+    - Penalty for touching walls
+    - +1 to team when resource collected
+    - no friendly fire
+    - Longer (40 length) raycast perception
+    - -0.1f when firing laser
+    - observation for whether teammate is alive or not (true or false) - this brings vector observation space size up to 5
+    - Clustered random spawning for both teams, instead of purely random
+    - Ships drop a single resource when killed
+    - -2 penalty to teams when an agent dies
+    - Asteroids drop 2 resources
+
+    OUTCOME: According to the NumTotalAlive graph, more ships were alive at end of episode on average when asteroids dropped 2 resources compared to 1. However, the number of total alive was still decreasing over time and the behavior of agents appeared to still be killing each other.
+
+- `Symbiotic`:
+    - 3 orange asteroids and 3 blue asteroids. Blue ships can only destroy blue asteroids and collect blue resources. Orange ships can only destroy orange asteroids and collect orange resources. However, asteroids of a color drop resources of the opposite color.
+    - Blue ships drop orange resource and orange ships drop blue resource when killed
+    - Similar config to RewardingAsteroids except for the following notable configs:
+    - -1 penalty to teams when agent dies
+    - -0.1f when firing laser
+    - Asteroids drop 1 resource
+
+    OUTCOME: Ships just kill each other and don't attack asteroids because of the short-term rewards they get. They don't realize they could collaborate for higher overall resources/rewards.
+
+- `Symbiotic2`:
+    - 3 orange asteroids and 3 blue asteroids. Blue ships can only destroy blue asteroids and collect blue resources. Orange ships can only destroy orange asteroids and collect orange resources. However, asteroids of a color drop resources of the opposite color.
+    - Ships don't drop any resources
+    - Similar config to RewardingAsteroids except for the following notable configs:
+    - -1 penalty to teams when agent dies
+    - -0.1f when firing laser
+    - Asteroids drop 1 resource
+
+    OUTCOME: Ships just fly around randomly and don't attack each other or asteroids
+
+- `Symbiotic3`:
+    - 3 orange asteroids and 3 blue asteroids. Blue ships can only destroy blue asteroids and collect blue resources. Orange ships can only destroy orange asteroids and collect orange resources. However, asteroids of a color drop resources of the opposite color.
+    - Ships don't drop any resources
+    - Similar config to RewardingAsteroids except for the following notable configs:
+    - -1 penalty to teams when agent dies
+    - No penalty for firing laser
+    - Asteroids drop 1 resource
+    - Stopped training at about 1 million steps because strategy was not improving
+
+    OUTCOME: Ships don't seem to have a clear strategy or learn to destroy all asteroids consistently. However, there are some cases where ships find a strategy of moving in circles around an asteroid of the opposite color and pushing it around the environment, likely because that asteroid will drop a resource they can collect if destroyed. They might be trying to push it closer to other team so it will be destroyed.
+
+- `Symbiotic4`:
+    - 0.2f reward for shooting asteroids
+    - 1 million steps
+
+- `Symbiotic5`:
+    - 0.2f reward for shooting asteroids
+    - cut off a little before 1 million steps
+    - Intsead of -1 group penalty for agents dying, it is changed to an individual penalty
+
+    OUTCOME: NumTotalAlive is higher than in Symbiotic4, likely because the -1 individal penalty makes ships understand how to avoid death better. Number of asteroids mined is slightly more than Symbiotic4. Ships shoot whenever they can and are very trigger happy, which still ends up killing other ships sometimes.
+
+- `Symbiotic5-1`:
+    - 0.2f reward for shooting asteroids
+    - --initialize-from=Symbiotic5
+    - Add 0.1 penalty for firing laser
+    - Another 1 million steps
+
+    OUTCOME: NumTotalAlive is much higher than than in Symbiotic5. Ships are more intentional with their shooting. Number of asteroids mined is slightly more than Symbiotic5. Just like previous configs, ships often seem to get confused and go in circles for a while before mining an asteroid, but are quicker to move towards resources. Might be because the 0.2f incentive to mine asteroids is pretty weak.
+
 ### General Observations
 - While the number of total agents alive tends to decrease and flatten out over training steps, I observe that there are oscillating peaks and valleys in the graphs for number of blue or orange agents alive, and that these oscillations are opposite to those of the other graph at same training step. The average distance between each oscillation is about 200,000 steps, which I think is because the self_play team_change value in configuration.yaml is 200000.
 
@@ -109,4 +173,11 @@
 - Try out checkpoint models saved in the middle of training the TwoVsTwo2 game to see if agents sought conflict more before realizing cooperation was better. Would be good to log graphs during training.
 - Clustered random spawning, where I spawn blue team agents within a small radius of a random center point, then pick a random point for orange team agents that is a minimum distance away from blue team and small them within small radius of that point (so that teams spawn together but prevent overfitting by having them spawn same spot every time).
 - Should try increasing the penalty that teams take when agents die to see if it reduces conflict (like -2 and -3)
+- Should try increasing the reward of resources dropped by asteroids relative to those by agents to see if it reduces conflict
 - Could track metric of when ships die in the episode, to see if ships are fighting more earlier on in different configurations
+- Could try setup recommended by Gemini with 2 different types of asteroids and resources so that one team can only pickup resources from asteroids that only the other team can shoot. This would lead to some interesting collaboration. Could also have agents drop the resource that other team can pick up when they are killed, to incentize some conflict, but then agents realize that they need other team to mine asteroids for them.
+- Could also try training for a while with situation like TwoVsTwo2 and then add in where agents drop resources when killed (using train from previous model)
+- Could give agents normalized position of their teammate for more informed collaboration
+- Could try to stack last 2 frames for ray perception sensor to give agent knowledge of the movement of their surroundings, but maybe that would take longer for a strategy to converge because of added complexity
+- Consider increasing time_horizon hyperparameter so that agents will remember that killing other agents leads to less long-term rewards
+- Could give agents an observation on whether other team is dead or alive (boolean)

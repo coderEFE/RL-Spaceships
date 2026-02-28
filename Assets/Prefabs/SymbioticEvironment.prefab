@@ -192,9 +192,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 857050844732292503}
-  - component: {fileID: 5991726733763753463}
+  - component: {fileID: 4737138553607740982}
   m_Layer: 0
-  m_Name: Environment
+  m_Name: SymbioticEvironment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,7 +221,7 @@ Transform:
   - {fileID: 5024852015483101990}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5991726733763753463
+--- !u!114 &4737138553607740982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,11 +230,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1839390189488287252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f3790e675b79234a9cf3bc3a9c78941, type: 3}
+  m_Script: {fileID: 11500000, guid: cc20954face8ea349b1dd10d34e0c42f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  asteroidPrefab: {fileID: 2723472403364639726, guid: 58568517f38f2af4489d578c180a8a1a, type: 3}
-  resourcePrefab: {fileID: 7346762312148930197, guid: b287f01b5d50745498c31302be5c7f4e, type: 3}
+  blueAsteroidPrefab: {fileID: 2723472403364639726, guid: 263ec1c53abc16e43a6ff036654c53b8, type: 3}
+  orangeAsteroidPrefab: {fileID: 2723472403364639726, guid: 10a753063bb2fda4ca743ef95e7b6cd9, type: 3}
+  blueResourcePrefab: {fileID: 7346762312148930197, guid: 3d7d7db5f7ef830409931a00419c04cc, type: 3}
+  orangeResourcePrefab: {fileID: 7346762312148930197, guid: 922552bd460324c49b656a2b9a80cc6a, type: 3}
   agentsList:
   - {fileID: 7722073011495349830}
   - {fileID: 1790722703014409360}
@@ -736,7 +738,7 @@ MonoBehaviour:
   shootCooldown: 1
   team: 1
   isTeammateAlive: 1
-  symbioticEnvironment: 0
+  symbioticEnvironment: 1
 --- !u!114 &881471986707899998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,8 +756,10 @@ MonoBehaviour:
   - orangeAgent
   - blueAgent
   - wall
-  - asteroid
-  - resource
+  - orangeAsteroid
+  - blueAsteroid
+  - orangeResource
+  - blueResource
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
@@ -1738,7 +1742,7 @@ MonoBehaviour:
   shootCooldown: 1
   team: 0
   isTeammateAlive: 1
-  symbioticEnvironment: 0
+  symbioticEnvironment: 1
 --- !u!114 &6146037791811022942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1756,8 +1760,10 @@ MonoBehaviour:
   - blueAgent
   - orangeAgent
   - wall
-  - asteroid
-  - resource
+  - blueAsteroid
+  - orangeAsteroid
+  - blueResource
+  - orangeResource
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
@@ -2012,7 +2018,7 @@ MonoBehaviour:
   shootCooldown: 1
   team: 0
   isTeammateAlive: 1
-  symbioticEnvironment: 0
+  symbioticEnvironment: 1
 --- !u!114 &4461611907034197338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2030,8 +2036,10 @@ MonoBehaviour:
   - blueAgent
   - orangeAgent
   - wall
-  - asteroid
-  - resource
+  - blueAsteroid
+  - orangeAsteroid
+  - blueResource
+  - orangeResource
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0
@@ -2466,7 +2474,7 @@ MonoBehaviour:
   shootCooldown: 1
   team: 1
   isTeammateAlive: 1
-  symbioticEnvironment: 0
+  symbioticEnvironment: 1
 --- !u!114 &7802350440577432856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2484,8 +2492,10 @@ MonoBehaviour:
   - orangeAgent
   - blueAgent
   - wall
-  - asteroid
-  - resource
+  - orangeAsteroid
+  - blueAsteroid
+  - orangeResource
+  - blueResource
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0

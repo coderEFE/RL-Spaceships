@@ -16,7 +16,7 @@ public class SpaceshipAgent : Agent
     [SerializeField] private GameObject laser;
     [SerializeField] private float moveSpeed = 1.5f;
     [SerializeField] private float turnSpeed = 180f;
-    [SerializeField] private float laserLength = 15f;
+    [SerializeField] private float laserLength = 5f;
     [SerializeField] private float shootCooldown = 1f;
 
     public Team team;
@@ -24,6 +24,8 @@ public class SpaceshipAgent : Agent
     private bool isShooting = false; // TODO: might not need this?
     private float lastShootTime = 0f;
     public bool isTeammateAlive = true; // This approach would change if we have more than 2 agents per team
+    public float proportionOfThisTeamAgentsRemaining = 1f; 
+    public float proportionOfOppositeTeamAgentsRemaining = 1f; 
     private int currentEpisode = 0;
     private float cumulativeReward = 0f;
 
@@ -70,7 +72,9 @@ public class SpaceshipAgent : Agent
         // time remaining to shoot = 1 if just shot, 0 if can shoot now
         var timeRemainingToShoot = Mathf.Clamp01((lastShootTime + shootCooldown - Time.time) / shootCooldown);
         sensor.AddObservation(timeRemainingToShoot);
-        sensor.AddObservation(isTeammateAlive ? 1f : 0f);
+        sensor.AddObservation(proportionOfThisTeamAgentsRemaining);
+        sensor.AddObservation(proportionOfOppositeTeamAgentsRemaining);
+        //sensor.AddObservation(isTeammateAlive ? 1f : 0f);
         //Debug.Log(gameObject.name + ", isTeammateAlive: " + isTeammateAlive);
     }
 
@@ -164,12 +168,12 @@ public class SpaceshipAgent : Agent
                     if (team == Team.Blue && hit.collider.CompareTag("blueAsteroid"))
                     {
                         hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
-                        AddReward(0.2f);
+                        //AddReward(0.2f);
                     }
                     if (team == Team.Orange && hit.collider.CompareTag("orangeAsteroid"))
                     {
                         hit.collider.gameObject.GetComponent<Asteroid>().OnHit();
-                        AddReward(0.2f);
+                        //AddReward(0.2f);
                     }
                 }
             }
@@ -190,8 +194,7 @@ public class SpaceshipAgent : Agent
         if (assaultingTeam != team)
         {
             // TODO: could have hit points instead of insta-death
-            // TODO: could add -1.0 negative reward for being destroyed
-            AddReward(-1.0f);
+            //AddReward(-8.0f);
             OnSpaceshipDestroyed?.Invoke(this);
         }
     }

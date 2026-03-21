@@ -30,8 +30,19 @@
     - Longer (40 length) raycast perception
     - -0.1f when firing laser
     - added another observation for whether teammate is alive or not (true or false) - this brings vector observation space size up to 5
+    - Ships don't drop resources
 
     OUTCOME: No jitter/stutter in movement at all compared to TwoVsTwoFriendlyFire and TwoVsTwo (which only had a little). Ships had a strategy of racing as fast as they can to asteroids and only shooting once they were next to the asteroid, immediately collecting the resource. This meant that there was less risk of shooting other ships. Ships did not shoot at each other and hardly ever died, which also might have been because there was no penalty for dying (although I thought that would realize that they could not collect as many resources if they died, and that they could collect more if they killed other ships). It would be interesting to look through history of training to see if ships did shoot each other in past, but realized peace was more beneficial.
+
+- TODO: `TwoVsTwoNoShipResources`:
+    - Penalty for touching walls
+    - +1 to team when resource collected
+    - no friendly fire
+    - Longer (40 length) raycast perception
+    - -0.1f when firing laser
+    - observation for teammate is alive or not (true or false)
+    - Clustered random spawning for both teams, instead of purely random
+    - Ships don't drop resources
 
 - `TwoVsTwo3`:
     - Penalty for touching walls
@@ -161,6 +172,83 @@
 
     OUTCOME: NumTotalAlive is much higher than than in Symbiotic5. Ships are more intentional with their shooting. Number of asteroids mined is slightly more than Symbiotic5. Just like previous configs, ships often seem to get confused and go in circles for a while before mining an asteroid, but are quicker to move towards resources. Might be because the 0.2f incentive to mine asteroids is pretty weak.
 
+- `RewardingAsteroids2`:
+    - -2 individual penalty for dying
+    - Laser length reduced to 5 units
+
+- `RewardingAsteroids3`:
+    - -4 individual penalty for dying
+    - Laser length reduced to 5 units
+
+- `RewardingAsteroids4`:
+    - -8 individual penalty for dying
+    - Laser length reduced to 5 units
+
+- `Symbiotic6`:
+    - No reward for shooting asteroids
+    - No penalty for firing laser
+    - No penalty for dying
+    - Swap out observation of teammate being alive or not with an observation of the normalized value of how many agents on other team are alive (1 being all of them, 0.5 being half of them, 0 being none of them)
+    - 2 million steps
+    - Use SpaceshipTwosLSTM.yaml config file which has LSTM with sequence_length: 128 and memory_size: 128.
+
+    - TODO: could train this one for longer to see if interesting behaviors converge
+
+- `TwoVsTwoLSTM`:
+    - TODO: Try LSTM with TwoVsTwo setup where agents do not drop resources. Use shorter lasers. Has observation of enemy team being alive. See if agents fight each other when they realize that killing other team leads to more chances for them to get resources.
+
+Potential new setup for draft of honors research: Just manipulative penalty magnitude for dying, and manipulate amount of resources dropped by asteroids. Has 6 vector observations because it includes proportion of this team agents alive and proportion of other team agents alive. Have 6 asteroids for a "perfect nash equilibrium" so its not inherently competitive. Could make alternate asteroids drop a different kind of resource with a higher reward. I should probably stick with regular beta (0.005) because increasing beta didn't seem to lead to new strategies
+Try with 10 conditions (2 types of rewards that asteroids drop with 5 types of penalties)
+
+- `Beta1RewardAsteroids1Penalty`:
+    - -1 group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - 0.01 beta (doubled). 
+    - Train for 4 million steps
+
+- `1RewardAsteroids0Penalty`:
+    - No group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `1RewardAsteroids1Penalty`:
+    - -1 group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `1RewardAsteroids2Penalty`:
+    - -2 group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `1RewardAsteroids4Penalty`:
+    - -4 group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `1RewardAsteroids8Penalty`:
+    - -8 group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
 ### General Observations
 - While the number of total agents alive tends to decrease and flatten out over training steps, I observe that there are oscillating peaks and valleys in the graphs for number of blue or orange agents alive, and that these oscillations are opposite to those of the other graph at same training step. The average distance between each oscillation is about 200,000 steps, which I think is because the self_play team_change value in configuration.yaml is 200000.
 
@@ -181,3 +269,11 @@
 - Could try to stack last 2 frames for ray perception sensor to give agent knowledge of the movement of their surroundings, but maybe that would take longer for a strategy to converge because of added complexity
 - Consider increasing time_horizon hyperparameter so that agents will remember that killing other agents leads to less long-term rewards
 - Could give agents an observation on whether other team is dead or alive (boolean)
+- Could increase beta hyperparameter to 0.01 (instead of 0.005) to match other POCA configs and encourage more exploration if entropy is decreasing too quickly
+- Could add memory hyperparameters in config file to give agents an LSTM like Hallway environment. Great explanation here: https://discussions.unity.com/t/lstm-unity-ml-agents/869919
+- Try extending LSTM sequence_length and see if it hits a max
+- Could add a "stag"/big asteroid that requires both teams to destroy it and rewards both teams when destroyed
+- Could have asteroids that respawn so that having more agents alive would help them all get higher rewards because more asteroid would be mined at once
+- Could also try a setup where only one team can shoot lasers and only one team can pick up resources, but that picking up resources rewards all teams. That way the team that shoots lasers is rewarded in the future for their actions.
+- Could try having one team use a pretrained model that only goes after asteroids (was trained when agents did not drop resources) and another team use a model like 1RewardAsteroids1Penalty. Could see if the agents adjust their strategies at all
+- Try a setup where there are no small asteroids, just one large asteroid in the middle that requires agents from both team to touch it to give out rewards to both teams. Agents still drop resources when killed.

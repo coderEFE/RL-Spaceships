@@ -167,9 +167,17 @@ public class SymboiticSpaceshipEnvController : MonoBehaviour
             numberBlueAgentsRemaining--;
             foreach (var otherAgent in agentsList)
             {
-                if (otherAgent.team == Team.Blue && otherAgent != agent)
+                if (otherAgent.team == Team.Blue)
                 {
-                    otherAgent.isTeammateAlive = false;
+                    otherAgent.proportionOfThisTeamAgentsRemaining = (float)numberBlueAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
+                    if (otherAgent != agent)
+                    {
+                        otherAgent.isTeammateAlive = false;
+                    }
+                }
+                if (otherAgent.team == Team.Orange)
+                {
+                    otherAgent.proportionOfOppositeTeamAgentsRemaining = (float)numberBlueAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
                 }
             }
             /*if (numberBlueAgentsRemaining == 0)
@@ -177,7 +185,7 @@ public class SymboiticSpaceshipEnvController : MonoBehaviour
                 Debug.Log("All blue agents destroyed");
                 blueAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //blueAgentGroup.AddGroupReward(-1.0f);
+            blueAgentGroup.AddGroupReward(-1.0f);
             //blueAgentGroup.AddGroupReward(-8.0f);
             //mockBlueGroupReward -= 2.0f;
             //GameObject resource = Instantiate(orangeResourcePrefab, agent.transform.position, Quaternion.identity, transform);
@@ -188,9 +196,17 @@ public class SymboiticSpaceshipEnvController : MonoBehaviour
             numberOrangeAgentsRemaining--;
             foreach (var otherAgent in agentsList)
             {
-                if (otherAgent.team == Team.Orange && otherAgent != agent)
+                if (otherAgent.team == Team.Orange)
                 {
-                    otherAgent.isTeammateAlive = false;
+                    otherAgent.proportionOfThisTeamAgentsRemaining = (float)numberOrangeAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
+                    if (otherAgent != agent)
+                    {
+                        otherAgent.isTeammateAlive = false;
+                    }
+                }
+                if (otherAgent.team == Team.Blue)
+                {
+                    otherAgent.proportionOfOppositeTeamAgentsRemaining = (float)numberOrangeAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
                 }
             }
             /*if (numberOrangeAgentsRemaining == 0)
@@ -198,7 +214,7 @@ public class SymboiticSpaceshipEnvController : MonoBehaviour
                 Debug.Log("All orange agents destroyed");
                 orangeAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //orangeAgentGroup.AddGroupReward(-1.0f);
+            orangeAgentGroup.AddGroupReward(-1.0f);
             //orangeAgentGroup.AddGroupReward(-8.0f);
             //GameObject resource = Instantiate(blueResourcePrefab, agent.transform.position, Quaternion.identity, transform);
             //resources.Add(resource);

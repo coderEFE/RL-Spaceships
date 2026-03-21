@@ -6,7 +6,8 @@ public class SpaceshipEnvController : MonoBehaviour
 {
     [SerializeField] private GameObject asteroidPrefab;
     private List<GameObject> asteroids = new List<GameObject>();
-    private int numAsteroids = 5;
+    private int numAsteroids = 6;
+    private bool singleRewardAsteroids = true;
     
     [SerializeField] private GameObject resourcePrefab;
     private List<GameObject> resources = new List<GameObject>();
@@ -114,10 +115,18 @@ public class SpaceshipEnvController : MonoBehaviour
 
     private void HandleAsteroidDestroyed(Asteroid asteroid)
     {
-        GameObject resource1 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(-0.5f, 0f, 0f), Quaternion.identity, transform);
-        resources.Add(resource1);
-        GameObject resource2 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(0.5f, 0f, 0f), Quaternion.identity, transform);
-        resources.Add(resource2);
+        if (singleRewardAsteroids)
+        {
+            GameObject resource = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity, transform);
+            resources.Add(resource);
+        }
+        else
+        {
+            GameObject resource1 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(-0.5f, 0f, 0f), Quaternion.identity, transform);
+            resources.Add(resource1);
+            GameObject resource2 = Instantiate(resourcePrefab, asteroid.transform.position + new Vector3(0.5f, 0f, 0f), Quaternion.identity, transform);
+            resources.Add(resource2);
+        }
         asteroids.Remove(asteroid.gameObject);
     }
 
@@ -154,9 +163,17 @@ public class SpaceshipEnvController : MonoBehaviour
             numberBlueAgentsRemaining--;
             foreach (var otherAgent in agentsList)
             {
-                if (otherAgent.team == Team.Blue && otherAgent != agent)
+                if (otherAgent.team == Team.Blue)
                 {
-                    otherAgent.isTeammateAlive = false;
+                    otherAgent.proportionOfThisTeamAgentsRemaining = (float)numberBlueAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
+                    if (otherAgent != agent)
+                    {
+                        otherAgent.isTeammateAlive = false;
+                    }
+                }
+                if (otherAgent.team == Team.Orange)
+                {
+                    otherAgent.proportionOfOppositeTeamAgentsRemaining = (float)numberBlueAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
                 }
             }
             /*if (numberBlueAgentsRemaining == 0)
@@ -164,8 +181,7 @@ public class SpaceshipEnvController : MonoBehaviour
                 Debug.Log("All blue agents destroyed");
                 blueAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //blueAgentGroup.AddGroupReward(-2.0f);
-            //blueAgentGroup.AddGroupReward(-8.0f);
+            //blueAgentGroup.AddGroupReward(-4.0f);
             //mockBlueGroupReward -= 2.0f;
         }
         else
@@ -173,9 +189,17 @@ public class SpaceshipEnvController : MonoBehaviour
             numberOrangeAgentsRemaining--;
             foreach (var otherAgent in agentsList)
             {
-                if (otherAgent.team == Team.Orange && otherAgent != agent)
+                if (otherAgent.team == Team.Orange)
                 {
-                    otherAgent.isTeammateAlive = false;
+                    otherAgent.proportionOfThisTeamAgentsRemaining = (float)numberOrangeAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
+                    if (otherAgent != agent)
+                    {
+                        otherAgent.isTeammateAlive = false;
+                    }
+                }
+                if (otherAgent.team == Team.Blue)
+                {
+                    otherAgent.proportionOfOppositeTeamAgentsRemaining = (float)numberOrangeAgentsRemaining / 2f; // This approach would change if we have more than 2 agents per team
                 }
             }
             /*if (numberOrangeAgentsRemaining == 0)
@@ -183,8 +207,7 @@ public class SpaceshipEnvController : MonoBehaviour
                 Debug.Log("All orange agents destroyed");
                 orangeAgentGroup.AddGroupReward(-3.0f);
             }*/
-            //orangeAgentGroup.AddGroupReward(-2.0f);
-            //orangeAgentGroup.AddGroupReward(-8.0f);
+            //orangeAgentGroup.AddGroupReward(-4.0f);
         }
         sumOfAgentDeathTimes += resetTimer;
         // Drop a single resource where ship is destroyed

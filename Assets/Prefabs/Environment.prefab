@@ -695,7 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -732,10 +732,12 @@ MonoBehaviour:
   laser: {fileID: 5654008480044540298}
   moveSpeed: 10
   turnSpeed: 180
-  laserLength: 15
+  laserLength: 5
   shootCooldown: 1
   team: 1
   isTeammateAlive: 1
+  proportionOfThisTeamAgentsRemaining: 1
+  proportionOfOppositeTeamAgentsRemaining: 1
   symbioticEnvironment: 0
 --- !u!114 &881471986707899998
 MonoBehaviour:
@@ -1697,7 +1699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1734,10 +1736,12 @@ MonoBehaviour:
   laser: {fileID: 8400462384871480356}
   moveSpeed: 10
   turnSpeed: 180
-  laserLength: 15
+  laserLength: 5
   shootCooldown: 1
   team: 0
   isTeammateAlive: 1
+  proportionOfThisTeamAgentsRemaining: 1
+  proportionOfOppositeTeamAgentsRemaining: 1
   symbioticEnvironment: 0
 --- !u!114 &6146037791811022942
 MonoBehaviour:
@@ -1971,7 +1975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1982,7 +1986,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: Spaceship
   TeamId: 0
   m_UseChildSensors: 1
@@ -2008,10 +2012,12 @@ MonoBehaviour:
   laser: {fileID: 3855447478702778903}
   moveSpeed: 10
   turnSpeed: 180
-  laserLength: 15
+  laserLength: 5
   shootCooldown: 1
   team: 0
   isTeammateAlive: 1
+  proportionOfThisTeamAgentsRemaining: 1
+  proportionOfOppositeTeamAgentsRemaining: 1
   symbioticEnvironment: 0
 --- !u!114 &4461611907034197338
 MonoBehaviour:
@@ -2425,7 +2431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -2462,10 +2468,12 @@ MonoBehaviour:
   laser: {fileID: 803542711556565247}
   moveSpeed: 10
   turnSpeed: 180
-  laserLength: 15
+  laserLength: 5
   shootCooldown: 1
   team: 1
   isTeammateAlive: 1
+  proportionOfThisTeamAgentsRemaining: 1
+  proportionOfOppositeTeamAgentsRemaining: 1
   symbioticEnvironment: 0
 --- !u!114 &7802350440577432856
 MonoBehaviour:

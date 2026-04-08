@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 
-public class SpaceshipEnvController : MonoBehaviour
+public class CollaborativeSpaceshipEnvController : MonoBehaviour
 {
     [SerializeField] private GameObject asteroidPrefab;
+    [SerializeField] private GameObject bigAsteroidPrefab;
     private List<GameObject> asteroids = new List<GameObject>();
-    private int numAsteroids = 6;
+    private List<GameObject> bigAsteroids = new List<GameObject>();
+    private int numAsteroids = 0;
+    private int numBigAsteroids = 3;
     private bool singleRewardAsteroids = true;
     
     [SerializeField] private GameObject resourcePrefab;
@@ -41,6 +44,7 @@ public class SpaceshipEnvController : MonoBehaviour
         if (!firstTime) {
             // Record custom stats
             Academy.Instance.StatsRecorder.Add("Custom/NumAsteroidsLeft", asteroids.Count);
+            Academy.Instance.StatsRecorder.Add("Custom/NumBigAsteroidsLeft", bigAsteroids.Count);
             Academy.Instance.StatsRecorder.Add("Custom/NumBlueAlive", numberBlueAgentsRemaining);
             Academy.Instance.StatsRecorder.Add("Custom/NumOrangeAlive", numberOrangeAgentsRemaining);
             Academy.Instance.StatsRecorder.Add("Custom/NumTotalAlive", (numberBlueAgentsRemaining + numberOrangeAgentsRemaining));
@@ -82,6 +86,11 @@ public class SpaceshipEnvController : MonoBehaviour
             Destroy(asteroid);
         }
         asteroids.Clear();
+        foreach (var bigAsteroid in bigAsteroids)
+        {
+            Destroy(bigAsteroid);
+        }
+        bigAsteroids.Clear();
         
         // Destroy existing resources
         foreach (var resource in resources)
@@ -97,11 +106,18 @@ public class SpaceshipEnvController : MonoBehaviour
             GameObject asteroid = Instantiate(asteroidPrefab, asteroidPosition, Quaternion.identity, transform);
             asteroids.Add(asteroid);
         }
+        for (int i = 0; i < numBigAsteroids; i++)
+        {
+            Vector3 asteroidPosition = transform.position + new Vector3(Random.Range(-17f, 17f), Random.Range(-17f, 17f), 0f);
+            GameObject bigAsteroid = Instantiate(bigAsteroidPrefab, asteroidPosition, Quaternion.identity, transform);
+            bigAsteroids.Add(bigAsteroid);
+        }
     }
 
     void OnEnable()
     {
         Asteroid.OnAsteroidDestroyed += HandleAsteroidDestroyed;
+        BigAsteroid.OnBigAsteroidDestroyed += HandleBigAsteroidDestroyed;
         Resource.OnResourceCollected += HandleResourceCollected;
         SpaceshipAgent.OnSpaceshipDestroyed += HandleSpaceshipDestroyed;
     }
@@ -109,6 +125,7 @@ public class SpaceshipEnvController : MonoBehaviour
     void OnDisable()
     {
         Asteroid.OnAsteroidDestroyed -= HandleAsteroidDestroyed;
+        BigAsteroid.OnBigAsteroidDestroyed -= HandleBigAsteroidDestroyed;
         Resource.OnResourceCollected -= HandleResourceCollected;
         SpaceshipAgent.OnSpaceshipDestroyed -= HandleSpaceshipDestroyed;
     }
@@ -128,6 +145,23 @@ public class SpaceshipEnvController : MonoBehaviour
             resources.Add(resource2);
         }
         asteroids.Remove(asteroid.gameObject);
+    }
+
+    private void HandleBigAsteroidDestroyed(BigAsteroid bigAsteroid)
+    {
+        // Gives large reward to both teams to incentivize cooperation, since one team alone can't destroy it
+        blueAgentGroup.AddGroupReward(3.0f);
+        orangeAgentGroup.AddGroupReward(3.0f);
+        bigAsteroids.Remove(bigAsteroid.gameObject);
+
+        // End episode if all asteroids and resources are gone
+        if (AreObjectsGone())
+        {
+            Debug.Log("All objects gone, ending episode");
+            blueAgentGroup.EndGroupEpisode();
+            orangeAgentGroup.EndGroupEpisode();
+            ResetScene(false);
+        }
     }
 
     private void HandleResourceCollected(Resource resource, Team team)
@@ -217,7 +251,7 @@ public class SpaceshipEnvController : MonoBehaviour
 
     bool AreObjectsGone()
     {
-        return asteroids.Count == 0 && resources.Count == 0;
+        return asteroids.Count == 0 && bigAsteroids.Count == 0 && resources.Count == 0;
     }
 
     void FixedUpdate()

@@ -205,6 +205,10 @@ public class SpaceshipAgent : Agent
         {
             AddReward(-0.05f);
         }
+        if (collision.collider.CompareTag("bigAsteroid"))
+        {
+            collision.collider.gameObject.GetComponent<BigAsteroid>().OnTouch(team);
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -212,6 +216,14 @@ public class SpaceshipAgent : Agent
         if (collision.collider.CompareTag("wall"))
         {
             AddReward(-0.01f * Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("bigAsteroid"))
+        {
+            collision.collider.gameObject.GetComponent<BigAsteroid>().OnStopTouching(team);
         }
     }
 

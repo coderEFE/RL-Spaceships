@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 830649138924827616}
   - component: {fileID: 7298985078593630770}
   - component: {fileID: 7903887609801545602}
-  - component: {fileID: -8645364241953156687}
   - component: {fileID: 6479501516979339245}
   m_Layer: 0
   m_Name: OrangeAsteroid
@@ -154,34 +153,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-8645364241953156687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2723472403364639726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a501962d056745d1a30e99146ee39fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: GridSensor
-  m_CellScale: {x: 1, y: 1, z: 0.01}
-  m_GridSize: {x: 25, y: 1, z: 1}
-  m_RotateWithAgent: 1
-  m_AgentGameObject: {fileID: 0}
-  m_DetectableTags: []
-  m_ColliderMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_MaxColliderBufferSize: 500
-  m_InitialColliderBufferSize: 4
-  m_DebugColors: []
-  m_GizmoYOffset: 0
-  m_ShowGizmos: 0
-  m_CompressionType: 1
-  m_ObservationStacks: 1
 --- !u!114 &6479501516979339245
 MonoBehaviour:
   m_ObjectHideFlags: 0

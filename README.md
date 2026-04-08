@@ -249,6 +249,45 @@ Try with 10 conditions (2 types of rewards that asteroids drop with 5 types of p
     - 6 vector observations
     - Train for 2 million steps
 
+- `1RewardAsteroidsBaseline`:
+    - Ships do not drop resources when killed
+    - No penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `Collaborative2`:
+    - Ships do not drop resources when killed
+    - No penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 1 big asteroid: requires both team touching to destroy and gives 3 reward to both teams
+    - 2 small asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `Collaborative3`:
+    - Ships do not drop resources when killed
+    - No penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 3 big asteroids (having more should force teams to know they need to pick go to asteroid where other team is)
+    - 0 small asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `CollaborativeDropResource`:
+    - Ships drop resources when killed
+    - No penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 1 big asteroid: requires both team touching to destroy and gives 3 reward to both teams
+    - 0 small asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
 ### General Observations
 - While the number of total agents alive tends to decrease and flatten out over training steps, I observe that there are oscillating peaks and valleys in the graphs for number of blue or orange agents alive, and that these oscillations are opposite to those of the other graph at same training step. The average distance between each oscillation is about 200,000 steps, which I think is because the self_play team_change value in configuration.yaml is 200000.
 

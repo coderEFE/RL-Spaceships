@@ -13,6 +13,7 @@ TagManager:
   - orangeAsteroid
   - blueResource
   - orangeResource
+  - bigAsteroid
   layers:
   - Default
   - TransparentFX

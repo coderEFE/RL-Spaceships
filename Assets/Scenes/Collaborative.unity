@@ -351,7 +351,7 @@ PrefabInstance:
     - target: {fileID: 126015212395497444, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: f6ef0139ccb3428419b15fbbe16d700b, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: c3a41cf214a7e1847942af51712af3f0, type: 3}
     - target: {fileID: 126015212395497444, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_BehaviorType
       value: 2
@@ -403,7 +403,7 @@ PrefabInstance:
     - target: {fileID: 3536137357809156187, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: f6ef0139ccb3428419b15fbbe16d700b, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: c3a41cf214a7e1847942af51712af3f0, type: 3}
     - target: {fileID: 3536137357809156187, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_BehaviorType
       value: 2
@@ -411,7 +411,7 @@ PrefabInstance:
     - target: {fileID: 5262238893002295417, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: f6ef0139ccb3428419b15fbbe16d700b, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: c3a41cf214a7e1847942af51712af3f0, type: 3}
     - target: {fileID: 5262238893002295417, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_BehaviorType
       value: 2
@@ -419,7 +419,7 @@ PrefabInstance:
     - target: {fileID: 7818697688820673169, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: f6ef0139ccb3428419b15fbbe16d700b, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: c3a41cf214a7e1847942af51712af3f0, type: 3}
     - target: {fileID: 7818697688820673169, guid: 9087f9cd243b8a34ca8c327eac18c9b8, type: 3}
       propertyPath: m_BehaviorType
       value: 2

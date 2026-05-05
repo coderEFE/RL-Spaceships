@@ -9,7 +9,7 @@ public class CollaborativeSpaceshipEnvController : MonoBehaviour
     private List<GameObject> asteroids = new List<GameObject>();
     private List<GameObject> bigAsteroids = new List<GameObject>();
     private int numAsteroids = 0;
-    private int numBigAsteroids = 3;
+    private int numBigAsteroids = 1;
     private bool singleRewardAsteroids = true;
     
     [SerializeField] private GameObject resourcePrefab;
@@ -170,13 +170,13 @@ public class CollaborativeSpaceshipEnvController : MonoBehaviour
         if (team == Team.Blue)
         {
             Debug.Log("Blue team collected a resource!");
-            blueAgentGroup.AddGroupReward(1.0f);
+            blueAgentGroup.AddGroupReward(resource.value);
             //mockBlueGroupReward += 1.0f;
         }
         else
         {
             Debug.Log("Orange team collected a resource!");
-            orangeAgentGroup.AddGroupReward(1.0f);
+            orangeAgentGroup.AddGroupReward(resource.value);
         }
 
         // End episode if all asteroids and resources are gone
@@ -245,8 +245,8 @@ public class CollaborativeSpaceshipEnvController : MonoBehaviour
         }
         sumOfAgentDeathTimes += resetTimer;
         // Drop a single resource where ship is destroyed
-        //GameObject resource = Instantiate(resourcePrefab, agent.transform.position, Quaternion.identity, transform);
-        //resources.Add(resource);
+        GameObject resource = Instantiate(resourcePrefab, agent.transform.position, Quaternion.identity, transform);
+        resources.Add(resource);
     }
 
     bool AreObjectsGone()

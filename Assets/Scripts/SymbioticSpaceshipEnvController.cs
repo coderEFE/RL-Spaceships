@@ -140,13 +140,13 @@ public class SymboiticSpaceshipEnvController : MonoBehaviour
         if (team == Team.Blue)
         {
             Debug.Log("Blue team collected a resource!");
-            blueAgentGroup.AddGroupReward(1.0f);
+            blueAgentGroup.AddGroupReward(resource.value);
             //mockBlueGroupReward += 1.0f;
         }
         else
         {
             Debug.Log("Orange team collected a resource!");
-            orangeAgentGroup.AddGroupReward(1.0f);
+            orangeAgentGroup.AddGroupReward(resource.value);
         }
 
         // End episode if all asteroids and resources are gone

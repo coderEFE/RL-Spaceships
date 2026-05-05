@@ -235,6 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 2723472403364639726, guid: 58568517f38f2af4489d578c180a8a1a, type: 3}
   resourcePrefab: {fileID: 7346762312148930197, guid: b287f01b5d50745498c31302be5c7f4e, type: 3}
+  bigResourcePrefab: {fileID: 7346762312148930197, guid: 5bf049d462b3b4c4283cb346eb19f1cf, type: 3}
   agentsList:
   - {fileID: 7722073011495349830}
   - {fileID: 1790722703014409360}

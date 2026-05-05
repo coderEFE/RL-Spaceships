@@ -200,7 +200,7 @@
 Potential new setup for draft of honors research: Just manipulative penalty magnitude for dying, and manipulate amount of resources dropped by asteroids. Has 6 vector observations because it includes proportion of this team agents alive and proportion of other team agents alive. Have 6 asteroids for a "perfect nash equilibrium" so its not inherently competitive. Could make alternate asteroids drop a different kind of resource with a higher reward. I should probably stick with regular beta (0.005) because increasing beta didn't seem to lead to new strategies
 Try with 10 conditions (2 types of rewards that asteroids drop with 5 types of penalties)
 
-- `Beta1RewardAsteroids1Penalty`:
+- `Beta1RewardAsteroids1Penalty` (`_4mil` means 4 million steps training):
     - -1 group penalty for dying
     - 5 unit laser length
     - randomized cluster spawning
@@ -258,6 +258,28 @@ Try with 10 conditions (2 types of rewards that asteroids drop with 5 types of p
     - 6 vector observations
     - Train for 2 million steps
 
+- `2RewardAsteroids0Penalty`:
+    - Asteroids drop big resources that give teams a reward of 2 (double regular resources)
+    - No group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+
+- `4RewardAsteroids0Penalty`:
+    - Asteroids drop big resources that give teams a reward of 4
+    - No group penalty for dying
+    - 5 unit laser length
+    - randomized cluster spawning
+    - 6 asteroids
+    - 6 vector observations
+    - Train for 2 million steps
+    - OUTCOME: ships kill each other far less, but they fire lasers whenever they can (trigger happy) and hit walls more often. This is likely because very high reward from asteroids overpowers the small penalties from shooting and hitting walls.
+
+TODO: Would be interesting to try increasing the amount of reward that asteroids give rather than just trying all penalty values with 2 reward asteroids. No penalty for ship deaths. Try reward values of 1, 2, 3, 4.
+Should maybe train a 2RewardAsteroidsBaseline run too, where ships don't drop resources
+
 - `Collaborative2`:
     - Ships do not drop resources when killed
     - No penalty for dying
@@ -287,6 +309,20 @@ Try with 10 conditions (2 types of rewards that asteroids drop with 5 types of p
     - 0 small asteroids
     - 6 vector observations
     - Train for 2 million steps
+
+- `4Mil_CollaborativeDropResource`:
+    - Same as one above, but training for another 2 mil steps (4 mil total)
+    - OUTCOME: Actually led to teams killing each other less and successfully destroying asteroid more, leading to higher group cumulative reward
+
+- `4Mil_CollaborativeDropResource`:
+    - Trained CollaborativeDropResource environment with 4 million steps from scratch to see if collaboration can be recreated
+    - OUTCOME: Unfortunately, teams did not learn to destroy the asteroid together and just learned to kill each other. My theory is that the stochastic nature of the run led to teams not finding out quickly enough that the big asteroid gives them a big reward if they work together and they got stuck in local maximum from their historical inertia of competing.
+
+TODO: Try Collaborative environment with death penalties to see if that helps
+
+TODO: Try initializing training from either the small asteroid or big asteroid environment baseline runs (where ships don't drop resources) and then adding dropped resources to ships to see if the historical intertia prevents them from devolving into fighting
+
+TODO: Should environment with greater asteroid rewards have a different resource type that the asteroid drops, or should it just drop more of the same resource type?
 
 ### General Observations
 - While the number of total agents alive tends to decrease and flatten out over training steps, I observe that there are oscillating peaks and valleys in the graphs for number of blue or orange agents alive, and that these oscillations are opposite to those of the other graph at same training step. The average distance between each oscillation is about 200,000 steps, which I think is because the self_play team_change value in configuration.yaml is 200000.
